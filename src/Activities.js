@@ -14,6 +14,9 @@ import {
     Checkbox
 } from "@material-ui/core";
 
+//components
+import UnperformedModal from './UnperformedModal';
+
 const styles = {
     gridContainer: {
         width: '50%',
@@ -23,26 +26,12 @@ const styles = {
     header: {
         backgroundColor: 'grey',
         color: 'white',
-
+    },
+    modalHeader: {
+        backgroundColor: 'rgb(255, 0, 0, 0.7)'
     }
 };
 
-
-const COLUMNS = [{
-    field: 'name',
-    headerName: 'Acitivty Name',
-    flex: 2
-}, {
-    field: 'cf',
-    headerName: 'COVID friendly',
-    valueGetter: (params) => `${params.value ? 'Yes' : 'No'}`,
-    flex: 1
-}, {
-    field: 'times',
-    headerName: 'Times performed',
-    type: 'number',
-    flex: 1
-}]
 const ROWS = [{
     id: 12,
     name: 'Netflix & Chill',
@@ -93,6 +82,8 @@ function Activities(props) {
     const { classes } = props;
     const [activities, setActivities] = React.useState(ROWS);
     const [selected, setSelected] = React.useState({});
+    const [showModal, setShowModal] = React.useState(false);
+    const [unperformedActivities, setUnperformedActivities] = React.useState([]);
 
     const handlePerform = () => {
         const notAllowed = [];
@@ -100,11 +91,7 @@ function Activities(props) {
 
         for (const [key, value] of Object.entries(selected)) {
             if (value.cf) {
-                console.log(key + 'is allowed');
                 const activity = tmpActivities.filter(activity => activity.id == key)[0];
-                console.log('Act selected')
-                console.log(activity);
-
                 activity.times += 1;
             } else {
                 notAllowed.push(value.name);
@@ -112,6 +99,10 @@ function Activities(props) {
         }
         setActivities(tmpActivities);
         setSelected({});
+        if (notAllowed.length) {
+            setUnperformedActivities(notAllowed);
+            setShowModal(true);
+        }
     }
 
     const onSelectAllClick = (event) => {
@@ -130,6 +121,15 @@ function Activities(props) {
 
     return (
         <React.Fragment>
+            <UnperformedModal
+                show={showModal}
+                close={() => {
+                    setShowModal(false);
+                    setUnperformedActivities([]);
+                }}
+                activities={unperformedActivities}
+                classes={classes}
+            />
             <h1>My 2020 Activities</h1>
             <div className={classes.gridContainer}>
                 <TableContainer component={Paper}>
@@ -138,7 +138,7 @@ function Activities(props) {
                             <TableRow>
                                 <StyledTableCell padding="checkbox">
                                     <Checkbox
-                                        checked={Object.keys(selected).length && Object.keys(selected).length === activities.length}
+                                        checked={Object.keys(selected).length === activities.length}
                                         onChange={onSelectAllClick}
                                     />
                                 </StyledTableCell>
@@ -151,9 +151,8 @@ function Activities(props) {
                             {activities.map((activity) => {
                                 const isItemSelected = activity.id in selected;
                                 return (<TableRow
-                                    key={activity.name}
+                                    key={activity.id}
                                     hover
-                                    tabIndex={-1}
                                     role="checkbox"
                                     onClick={e => onRowClick(e, activity)}
                                     selected={isItemSelected}>
