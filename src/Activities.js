@@ -77,7 +77,7 @@ const StyledTableCell = withStyles((theme) => ({
     }
 }))(TableCell);
 
-function Activities(props) {
+export function Activities(props) {
 
     const { classes } = props;
     const [activities, setActivities] = React.useState(ROWS);
@@ -130,21 +130,21 @@ function Activities(props) {
                 activities={unperformedActivities}
                 classes={classes}
             />
-            <h1>My 2020 Activities</h1>
+            <h1 test-id='activities-title'>My 2020 Activities</h1>
             <div className={classes.gridContainer}>
                 <TableContainer component={Paper}>
-                    <Table >
-                        <TableHead className={classes.header}>
+                    <Table test-id='activities-table'>
+                        <TableHead className={classes.header} test-id='activities-header'>
                             <TableRow>
-                                <StyledTableCell padding="checkbox">
+                                <StyledTableCell padding="checkbox" test-id='activities-header-checkbox'>
                                     <Checkbox
-                                        checked={Object.keys(selected).length === activities.length}
+                                        checked={Object.keys(selected).length && Object.keys(selected).length === activities.length}
                                         onChange={onSelectAllClick}
                                     />
                                 </StyledTableCell>
-                                <StyledTableCell>Activity name</StyledTableCell>
-                                <StyledTableCell>COVID friendly</StyledTableCell>
-                                <StyledTableCell align="right">Times performed</StyledTableCell>
+                                <StyledTableCell test-id='activities-header-name'>Activity name</StyledTableCell>
+                                <StyledTableCell test-id='activities-header-cf'>COVID friendly</StyledTableCell>
+                                <StyledTableCell align="right" test-id='activities-header-times'>Times performed</StyledTableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -172,6 +172,7 @@ function Activities(props) {
             <Button
                 color="primary"
                 variant="contained"
+                test-id='activities-button'
                 disabled={!Object.keys(selected).length}
                 onClick={handlePerform}>PERFORM!</Button>
         </React.Fragment>

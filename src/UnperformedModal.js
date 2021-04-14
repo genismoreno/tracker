@@ -6,16 +6,16 @@ import "bootstrap/dist/css/bootstrap.css";
 function UnperformedModal(props) {
     const { classes, show, close, activities } = props;
     return (
-        <Modal show={show} onHide={close}>
+        <Modal show={show} onHide={close} test-id="unperformed-modal-root">
             <Modal.Header closeButton className={classes.modalHeader}>
-                <Modal.Title>Unperformed activities</Modal.Title>
+                <Modal.Title test-id="unperformed-modal-title">Unperformed activities</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <div>
+                <div test-id="unperformed-modal-body">
                     The following activities were not performed due covid unfriendly status
                     </div>
-                <ul>
-                    {activities.map(activity => <li key={activity}>{activity}</li>)}
+                <ul test-id="unperformed-modal-list">
+                    {activities.map(activity => <li test-id="unperformed-modal-activity" key={activity}>{activity}</li>)}
                 </ul>
             </Modal.Body>
         </Modal>
