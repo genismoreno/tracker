@@ -15,7 +15,7 @@ function UnperformedModal(props) {
                     The following activities were not performed due covid unfriendly status
                     </div>
                 <ul>
-                    {activities.map(activity => <li>{activity}</li>)}
+                    {activities.map(activity => <li key={activity}>{activity}</li>)}
                 </ul>
             </Modal.Body>
         </Modal>
